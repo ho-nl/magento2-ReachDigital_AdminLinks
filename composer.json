@@ -1,0 +1,20 @@
+{
+    "name": "reach-digital/magento2-admin-links",
+    "description": "The admin links module for Magento 2 allows you to send links to admin pages",
+    "homepage": "https://github.com/ho-nl/magento2-ReachDigital_AdminLinks",
+    "require": {
+        "php": "~7.2 || ~7.3 || ~7.4 || ~8.1",
+        "magento/product-community-edition": "^2.3 || ^2.4"
+
+    },
+    "type": "magento2-module",
+    "license": "BSD-2-Clause",
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+          "ReachDigital\\AdminLinks\\": "src/"
+        }
+    }
+}
