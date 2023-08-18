@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ReachDigital\AdminUrls\Plugin;
+namespace ReachDigital\AdminLinks\Plugin;
 
 use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\App\RequestInterface;
