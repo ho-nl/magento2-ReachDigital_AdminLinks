@@ -5,7 +5,7 @@ namespace ReachDigital\AdminLinks\Plugin;
 
 use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Escaper;
+use ReachDigital\AdminLinks\Model\AdminLinkManager;
 
 class RedirectUrlOnAdminLogin {
 
@@ -15,21 +15,25 @@ class RedirectUrlOnAdminLogin {
     private $request;
 
     /**
-     * @var Escaper
+     * @var AdminLinkManager
      */
-    private $escaper;
-    public function __construct(RequestInterface $request, Escaper $escaper)
+    private $adminLinkManager;
+    public function __construct(RequestInterface $request, AdminLinkManager $adminLinkManager)
     {
         $this->request = $request;
-        $this->escaper = $escaper;
+        $this->adminLinkManager = $adminLinkManager;
     }
 
     public function afterGetStartupPageUrl(UrlInterface $url, $result) {
-        $redirectUrl = $this->request->getParam('redirect-url');
-        if ($redirectUrl) {
-            return $this->escaper->escapeUrl('adminhtml/' . $redirectUrl);
+        $adminLinkReference = $this->request->getParam('al');
+        if (!$adminLinkReference) {
+            return $result;
         }
-        return $result;
+        $adminLink = $this->adminLinkManager->getAdminLinkByReference($adminLinkReference);
+        if (!$adminLink) {
+            return $result;
+        }
+        return $adminLink->getUrl();
     }
 }
 

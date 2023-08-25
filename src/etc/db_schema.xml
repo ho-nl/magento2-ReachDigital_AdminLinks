@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="reachdigital_admin_links" resource="default" comment="Links to admin urls">
+        <column xsi:type="int" name="link_id" identity="true" comment="Link Auto Increment" />
+        <column xsi:type="varchar" name="reference" length="50" nullable="false" comment="Reference used to create a redirect url" />
+        <column xsi:type="varchar" name="url" length="1024" nullable="false" comment="The url to redirect to" />
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="link_id" />
+        </constraint>
+    </table>
+</schema>
