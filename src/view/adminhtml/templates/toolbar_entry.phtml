@@ -1,0 +1,37 @@
+<?php
+/** @var ToolbarEntry $block */
+
+?>
+<div class="admin__action-dropdown-wrap">
+    <a
+        class="admin__action"
+        id="admin_link_button"
+        title="<?= $block->escapeHtml(__('Get admin link')) ?>"
+    >
+        <?= __('Get admin link') ?>
+    </a>
+    <div id="successMessage" hidden><?= __('Link copied.') ?></div>
+</div>
+<script type="text/javascript">
+    require([ 'jquery'], function($){
+        $(document).on("click","#admin_link_button", async function() {
+
+            const response = await fetch('<?= $block->getAdminLinkUrl() ?>', {
+                method: 'POST',
+                body: 'form_key=<?= $block->getFormKey() ?>&url=<?= $block->getRedirectUrl() ?>',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            const reference = await response.text()
+            navigator.clipboard.writeText('<?= $block->getLoginUrl() ?>?al=' + reference)
+
+            $('#successMessage').removeAttr('hidden')
+            $('#admin_link_button').attr('hidden', true)
+            setTimeout(()=>{
+                $('#successMessage').attr('hidden', true)
+                $('#admin_link_button').removeAttr('hidden')
+            }, 3000);
+        });
+    });
+</script>

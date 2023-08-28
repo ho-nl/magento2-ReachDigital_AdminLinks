@@ -1,0 +1,12 @@
+{
+    "reachdigital_admin_links": {
+        "column": {
+            "link_id": true,
+            "reference": true,
+            "url": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}
