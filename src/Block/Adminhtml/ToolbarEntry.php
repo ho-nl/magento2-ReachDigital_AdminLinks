@@ -9,6 +9,7 @@ use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\App\AreaList;
+use Magento\Framework\App\Route\ConfigInterface;
 
 /**
  *
@@ -25,16 +26,23 @@ class ToolbarEntry extends Template
      * @var AreaList
      */
     private $areaList;
+
+    /**
+     * @var ConfigInterface
+     */
+    private $routeConfig;
     public function __construct(
         Template\Context $context,
         UrlInterface $url,
         AreaList $areaList,
+        ConfigInterface $routeConfig,
         array $data = [],
         ?JsonHelper $jsonHelper = null,
         ?DirectoryHelper $directoryHelper = null
     ) {
         $this->url = $url;
         $this->areaList = $areaList;
+        $this->routeConfig = $routeConfig;
         parent::__construct($context, $data, $jsonHelper, $directoryHelper);
     }
 
@@ -47,6 +55,12 @@ class ToolbarEntry extends Template
             for ($keyEndPos = $keyPos + 5; $keyEndPos < \strlen($redirectUrl) && ctype_alnum($redirectUrl[$keyEndPos]); $keyEndPos++) {
             }
             $redirectUrl = \substr($redirectUrl, 0, $keyPos) . \substr($redirectUrl, $keyEndPos);
+        }
+        $routeParts = explode("/", $redirectUrl);
+        if (isset($routeParts[0])) {
+            $route = $this->routeConfig->getRouteByFrontName($routeParts[0]);
+            $routeParts[0] = $route;
+            $redirectUrl = \implode('/', $routeParts);
         }
         return $redirectUrl;
     }
