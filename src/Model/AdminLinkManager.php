@@ -3,11 +3,12 @@ declare(strict_types=1);
 
 namespace ReachDigital\AdminLinks\Model;
 
-use Magento\Framework\App\AreaList;
+use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Framework\Escaper;
 use Magento\Framework\UrlInterface;
 use ReachDigital\AdminLinks\Model\ResourceModel\AdminLink\CollectionFactory;
 use Magento\Framework\Math\Random;
+use Magento\Framework\App\DeploymentConfig;
 
 class AdminLinkManager
 {
@@ -38,9 +39,9 @@ class AdminLinkManager
     private $url;
 
     /**
-     * @var AreaList
+     * @var DeploymentConfig
      */
-    private $areaList;
+    private $deploymentConfig;
 
     public function __construct(
         CollectionFactory $adminLinkCollectionFactory,
@@ -48,14 +49,14 @@ class AdminLinkManager
         AdminLinkFactory $adminLinkFactory,
         Escaper $escaper,
         UrlInterface $url,
-        AreaList $areaList
+        DeploymentConfig $deploymentConfig
     ) {
         $this->adminLinkCollectionFactory = $adminLinkCollectionFactory;
         $this->mathRandom                 = $mathRandom;
         $this->adminLinkFactory           = $adminLinkFactory;
         $this->escaper                    = $escaper;
         $this->url = $url;
-        $this->areaList = $areaList;
+        $this->deploymentConfig = $deploymentConfig;
     }
 
     public function getAdminLinkByReference(string $reference): ?AdminLink
@@ -87,7 +88,7 @@ class AdminLinkManager
 
     public function getRedirectUrl(AdminLink $adminLink): string
     {
-        return $this->url->getBaseUrl() . $this->areaList->getFrontName('adminhtml') . '?al=' . $adminLink->getReference();
+        return $this->url->getBaseUrl() . $this->deploymentConfig->get(BackendConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME) . '?al=' . $adminLink->getReference();
     }
 
     private function generateUniqueReference(): string
