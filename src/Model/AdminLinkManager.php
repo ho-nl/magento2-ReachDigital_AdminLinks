@@ -9,6 +9,7 @@ use Magento\Framework\UrlInterface;
 use ReachDigital\AdminLinks\Model\ResourceModel\AdminLink\CollectionFactory;
 use Magento\Framework\Math\Random;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Store\Model\StoreManagerInterface;
 
 class AdminLinkManager
 {
@@ -43,13 +44,19 @@ class AdminLinkManager
      */
     private $deploymentConfig;
 
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
     public function __construct(
         CollectionFactory $adminLinkCollectionFactory,
         Random $mathRandom,
         AdminLinkFactory $adminLinkFactory,
         Escaper $escaper,
         UrlInterface $url,
-        DeploymentConfig $deploymentConfig
+        DeploymentConfig $deploymentConfig,
+        StoreManagerInterface $storeManager,
     ) {
         $this->adminLinkCollectionFactory = $adminLinkCollectionFactory;
         $this->mathRandom                 = $mathRandom;
@@ -57,6 +64,7 @@ class AdminLinkManager
         $this->escaper                    = $escaper;
         $this->url = $url;
         $this->deploymentConfig = $deploymentConfig;
+        $this->storeManager = $storeManager;
     }
 
     public function getAdminLinkByReference(string $reference): ?AdminLink
@@ -88,7 +96,7 @@ class AdminLinkManager
 
     public function getRedirectUrl(AdminLink $adminLink): string
     {
-        return $this->url->getBaseUrl() . $this->deploymentConfig->get(BackendConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME) . '?al=' . $adminLink->getReference();
+        return $this->url->getBaseUrl(['_scope' => $this->storeManager->getDefaultStoreView()]) . $this->deploymentConfig->get(BackendConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME) . '?al=' . $adminLink->getReference();
     }
 
     private function generateUniqueReference(): string
