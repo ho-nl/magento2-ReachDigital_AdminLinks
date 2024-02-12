@@ -96,7 +96,7 @@ class AdminLinkManager
 
     public function getRedirectUrl(AdminLink $adminLink): string
     {
-        return $this->url->getBaseUrl(['_scope' => $this->storeManager->getDefaultStoreView()]) . $this->deploymentConfig->get(BackendConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME) . '?al=' . $adminLink->getReference();
+        return $this->url->getBaseUrl(['_scope' => $this->storeManager->getDefaultStoreView(), '_type' => UrlInterface::URL_TYPE_WEB], ) . $this->deploymentConfig->get(BackendConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME) . '?al=' . $adminLink->getReference();
     }
 
     private function generateUniqueReference(): string
