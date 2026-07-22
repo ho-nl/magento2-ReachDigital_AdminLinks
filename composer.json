@@ -16,5 +16,10 @@
         "psr-4": {
           "ReachDigital\\AdminLinks\\": "src/"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.x-dev"
+        }
     }
 }
